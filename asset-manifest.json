@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/faceRecognition2020/static/css/main.84e7ba2b.chunk.css",
+    "main.js": "/faceRecognition2020/static/js/main.64d4a685.chunk.js",
+    "main.js.map": "/faceRecognition2020/static/js/main.64d4a685.chunk.js.map",
+    "runtime-main.js": "/faceRecognition2020/static/js/runtime-main.3d41a8a0.js",
+    "runtime-main.js.map": "/faceRecognition2020/static/js/runtime-main.3d41a8a0.js.map",
+    "static/js/2.0ea54fab.chunk.js": "/faceRecognition2020/static/js/2.0ea54fab.chunk.js",
+    "static/js/2.0ea54fab.chunk.js.map": "/faceRecognition2020/static/js/2.0ea54fab.chunk.js.map",
+    "index.html": "/faceRecognition2020/index.html",
+    "static/css/main.84e7ba2b.chunk.css.map": "/faceRecognition2020/static/css/main.84e7ba2b.chunk.css.map",
+    "static/js/2.0ea54fab.chunk.js.LICENSE.txt": "/faceRecognition2020/static/js/2.0ea54fab.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3d41a8a0.js",
+    "static/js/2.0ea54fab.chunk.js",
+    "static/css/main.84e7ba2b.chunk.css",
+    "static/js/main.64d4a685.chunk.js"
+  ]
+}
