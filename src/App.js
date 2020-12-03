@@ -23,6 +23,7 @@ function App() {
   const [faceBox, setFaceBox] = useState({});
   const [isSignedIn, setIsSignedIn] = useState(false);
   console.log(isSignedIn)
+  
   const inputChange = (e) => {
     setInput(e.target.value);
   };
@@ -55,12 +56,16 @@ function App() {
   };
 
   const HasSignedIn = () => {
-    setIsSignedIn(prevBool => prevBool = ! prevBool)
+    setIsSignedIn(true)
+  }
+
+  const HasSignedOut = () => {
+    setIsSignedIn(false)
   }
 
   return (
     <div className="tc">
-      <Navigation isSignedIn={isSignedIn} HasSignedIn={HasSignedIn} />
+      <Navigation isSignedIn={isSignedIn} HasSignedOut={HasSignedOut} />
       <Switch>
         <Route exact path="/">
           <Home />
