@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import Clarifai from "clarifai";
 
@@ -10,6 +10,7 @@ import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import SignIn from "./components/SignIn/SignIn";
 import Register from "./components/Register/Register";
+import Rank from "./components/Rank/Rank";
 
 const API_KEY = process.env.REACT_APP_FACE_RECOGNITION_API_KEY;
 
@@ -22,7 +23,26 @@ function App() {
   const [imageUrl, setImageUrl] = useState("");
   const [faceBox, setFaceBox] = useState({});
   const [isSignedIn, setIsSignedIn] = useState(false);
-  console.log(isSignedIn)
+  // const [dataBaseUsers, setDataBaseUsers] = useState([]);
+  const [loadUser, setLoadUser] = useState({
+    
+      id: '',
+      name: '',
+      email: '',
+      entries: 0,
+      joined: '',
+    
+  })
+
+  console.log(loadUser);
+
+
+
+  // useEffect( () => {
+  //   fetch('https://localhost:3001/')
+  //   .then(response => response.json())
+  //   .then(data => setDataBaseUsers(data))
+  // }, [])
   
   const inputChange = (e) => {
     setInput(e.target.value);
@@ -35,6 +55,20 @@ function App() {
         return faceDetectModel.predict(input);
       })
       .then((response) => {
+        if (response) {
+          fetch("http://localhost:3001/image", {
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              id: loadUser.id
+            })
+          })
+          .then(response => response.json())
+          .then(count => {
+            setLoadUser({...loadUser, entries: count})
+          })
+          
+        }
         const faceBoxInImg =
           response.outputs[0].data.regions[0].region_info.bounding_box;
         calculateFaceBox(faceBoxInImg);
@@ -55,30 +89,30 @@ function App() {
     });
   };
 
-  const HasSignedIn = () => {
-    setIsSignedIn(true)
+  const hasSignedIn = () => {
+    setIsSignedIn(true);
   }
 
-  const HasSignedOut = () => {
-    setIsSignedIn(false)
+  const hasSignedOut = () => {
+    setIsSignedIn(false);
   }
 
   return (
     <div className="tc">
-      <Navigation isSignedIn={isSignedIn} HasSignedOut={HasSignedOut} />
+      <Navigation isSignedIn={isSignedIn} hasSignedOut={hasSignedOut} />
       <Switch>
         <Route exact path="/">
           <Home />
         </Route>
-        <Route path="/sign-in">
-          <SignIn HasSignedIn={HasSignedIn} />
+        <Route path="/signin">
+          <SignIn hasSignedIn={hasSignedIn} setLoadUser={setLoadUser} />
         </Route>
         <Route path="/register">
-          <Register HasSignedIn={HasSignedIn} />
+          <Register hasSignedIn={hasSignedIn} setLoadUser={setLoadUser}/>
         </Route>
         <Route path="/app">
           <Logo />
-          {/* <Rank /> */}
+          <Rank name={loadUser.name} entries={loadUser.entries} />
           <ImageLinkForm inputChange={inputChange} submitImg={submitImg} />
           <FaceRecognition faceBox={faceBox} imgSrc={imageUrl} />
         </Route>

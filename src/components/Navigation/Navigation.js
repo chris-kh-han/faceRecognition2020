@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 
 
 
-function Navigation({ isSignedIn, HasSignedOut }) {
+function Navigation({ isSignedIn, hasSignedOut }) {
 
   return (
     <nav className="flex justify-end">
       {!isSignedIn ? (
         <div>
-          <Link to="/sign-in">
+          <Link to="/signin">
             <span className="dib f3 link dim black underline pa3 pointer tr no-underline">
               Sign In
             </span>
@@ -25,7 +25,7 @@ function Navigation({ isSignedIn, HasSignedOut }) {
           <Link to="/">
             <span 
                 className="dib f3 link dim black underline pa3 pointer tr no-underline"
-                onClick={HasSignedOut}
+                onClick={hasSignedOut}
             >
               Sign out
             </span>
