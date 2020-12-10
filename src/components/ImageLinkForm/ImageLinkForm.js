@@ -5,7 +5,7 @@ function ImageLinkForm({ inputChange, submitImg }) {
     return (
         <div>
             <p className="f3">
-                {'PASTE IMG SRC INSIDE OF BOX'}
+                {'Our App will detect faces in your pictures.'}
             </p>
             <div className="flex justify-center">
                 <div className="form pa4 br3 shadow-5">
