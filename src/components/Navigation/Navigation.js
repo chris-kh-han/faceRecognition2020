@@ -1,9 +1,22 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 
 
-function Navigation({ isSignedIn, hasSignedOut }) {
+function Navigation({ isSignedIn, hasSignedOut, loadUserInitial, setLoadUser, setImageUrl }) {
+  const history = useHistory();
+
+  const loadingHomePage = () => {
+    let path = "/";
+    history.push(path);
+  };
+
+  const signedOut = () => {
+    setLoadUser(loadUserInitial);
+    loadingHomePage();
+    hasSignedOut()
+    setImageUrl('')
+  }
 
   return (
     <nav className="flex justify-end">
@@ -25,7 +38,7 @@ function Navigation({ isSignedIn, hasSignedOut }) {
           <Link to="/">
             <span 
                 className="dib f3 link dim black underline pa3 pointer tr no-underline"
-                onClick={hasSignedOut}
+                onClick={signedOut}
             >
               Sign out
             </span>
