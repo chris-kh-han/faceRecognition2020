@@ -5,15 +5,7 @@ function SignIn({ hasSignedIn, setLoadUser }) {
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
   
-  // dataBaseUsers.forEach((user) => {
-  //   if (user.email === signInEmail && user.password === signInPassword) {
-  //     console.log("true");
-  //     setMatchUser(true);
-  //   }
-  // });
-
   const history = useHistory();
-
   const loadingAppPage = () => {
     let path = "/app";
     history.push(path);
@@ -29,19 +21,19 @@ function SignIn({ hasSignedIn, setLoadUser }) {
         password: signInPassword,
       }),
     })
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         
-        if (data === 'success') {
+        if (data.id) {
           loadingAppPage();
           hasSignedIn();
           setLoadUser({
-            id: "122",
-            name: "Abc",
-            email: "abc@gmail.com",
-            password: "abc",
-            entries: 0,
-            joined: new Date(),
+            id: data.id,
+            name: data.name,
+            email: data.email,
+            password: data.password,
+            entries: data.entries,
+            joined: data.joined,
         });
 
         }
