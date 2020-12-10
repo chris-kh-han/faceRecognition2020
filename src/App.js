@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Switch, Route } from "react-router-dom";
-import Clarifai from "clarifai";
+// import Clarifai from "clarifai";
 
 import Home from "./components/Home/Home";
 import Navigation from "./components/Navigation/Navigation";
@@ -12,11 +12,11 @@ import SignIn from "./components/SignIn/SignIn";
 import Register from "./components/Register/Register";
 import Rank from "./components/Rank/Rank";
 
-const API_KEY = process.env.REACT_APP_FACE_RECOGNITION_API_KEY;
+// const API_KEY = process.env.REACT_APP_FACE_RECOGNITION_API_KEY;
 
-const app = new Clarifai.App({
-  apiKey: `${API_KEY}`,
-});
+// const app = new Clarifai.App({
+//   apiKey: `${API_KEY}`,
+// });
 
 function App() {
   const [input, setInput] = useState("");
@@ -24,57 +24,55 @@ function App() {
   const [faceBox, setFaceBox] = useState({});
   const [isSignedIn, setIsSignedIn] = useState(false);
   // const [dataBaseUsers, setDataBaseUsers] = useState([]);
-  const [loadUser, setLoadUser] = useState({
-    
-      id: '',
-      name: '',
-      email: '',
-      entries: 0,
-      joined: '',
-    
-  })
-
+  const loadUserInitial = {
+    id: "",
+    name: "",
+    email: "",
+    entries: 0,
+    joined: "",
+  };
+  const [loadUser, setLoadUser] = useState(loadUserInitial);
   console.log(loadUser);
-
-
 
   // useEffect( () => {
   //   fetch('https://localhost:3001/')
   //   .then(response => response.json())
   //   .then(data => setDataBaseUsers(data))
   // }, [])
-  
+
   const inputChange = (e) => {
     setInput(e.target.value);
   };
 
   const submitImg = () => {
-    app.models
-      .initModel({ id: Clarifai.FACE_DETECT_MODEL })
-      .then((faceDetectModel) => {
-        return faceDetectModel.predict(input);
-      })
+    setImageUrl(input);
+    fetch("http://localhost:3001/imageurl", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input }),
+    })
+      .then((response) => response.json())
+      
       .then((response) => {
         if (response) {
           fetch("http://localhost:3001/image", {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
+            method: "put",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              id: loadUser.id
+              id: loadUser.id,
+            }),
+          })
+            .then((response) => response.json())
+            .then((count) => {
+              setLoadUser({ ...loadUser, entries: count });
             })
-          })
-          .then(response => response.json())
-          .then(count => {
-            setLoadUser({...loadUser, entries: count})
-          })
-          
+            .catch((err) => console.log(err));
         }
         const faceBoxInImg =
           response.outputs[0].data.regions[0].region_info.bounding_box;
         calculateFaceBox(faceBoxInImg);
-      });
-
-    setImageUrl(input);
+      })
+      .catch((err) => console.log(err));
   };
 
   const calculateFaceBox = (imgBoxData) => {
@@ -91,15 +89,21 @@ function App() {
 
   const hasSignedIn = () => {
     setIsSignedIn(true);
-  }
+  };
 
   const hasSignedOut = () => {
     setIsSignedIn(false);
-  }
+  };
 
   return (
     <div className="tc">
-      <Navigation isSignedIn={isSignedIn} hasSignedOut={hasSignedOut} />
+      <Navigation
+        isSignedIn={isSignedIn}
+        hasSignedOut={hasSignedOut}
+        loadUserInitial={loadUserInitial}
+        setLoadUser={setLoadUser}
+        setImageUrl={setImageUrl}
+      />
       <Switch>
         <Route exact path="/">
           <Home />
@@ -108,7 +112,7 @@ function App() {
           <SignIn hasSignedIn={hasSignedIn} setLoadUser={setLoadUser} />
         </Route>
         <Route path="/register">
-          <Register hasSignedIn={hasSignedIn} setLoadUser={setLoadUser}/>
+          <Register hasSignedIn={hasSignedIn} setLoadUser={setLoadUser} />
         </Route>
         <Route path="/app">
           <Logo />
