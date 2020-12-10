@@ -25,13 +25,19 @@ function Register({ hasSignedIn, setLoadUser }) {
       }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        setLoadUser({
-          name: data.name,
-          email: data.email,
-        })
-        loadingAppPage();
-        hasSignedIn();
+      .then((user) => {
+        if (user.id) {
+          setLoadUser({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            entries: user.entries,
+            joined: user.joined,
+          });
+          loadingAppPage();
+          hasSignedIn();
+        }
       });
     console.log(registerName, registerEmail, registerPassword);
   };
