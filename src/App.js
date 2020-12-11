@@ -51,7 +51,7 @@ function App() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ input }),
     })
-      .then((response) => response.json())
+      .then(response => response.json())
       
       .then((response) => {
         if (response) {
@@ -105,7 +105,7 @@ function App() {
         setImageUrl={setImageUrl}
       />
       <Switch>
-        <Route exact path="/">
+        <Route exact path="/faceRecognition2020">
           <Home />
         </Route>
         <Route path="/signin">
